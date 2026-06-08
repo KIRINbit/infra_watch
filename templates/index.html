@@ -744,7 +744,7 @@
                         <td><code>{{ .Key }}</code></td>
                         <form action="/settings/update/{{ .ID }}" method="POST" style="margin:0;">
                         <td>
-                                <input class="setting-input" type="text" name="setting_value" value="{{ .Value }}">
+                                <input class="setting-input" type="text" name="setting_value" value="{{ .Value }}" style="width: 100%; max-width: 150px; box-sizing: border-box;">
                         </td>
                         <td style="color: var(--text-muted);">{{ .UpdatedAt }}</td>
                         <td>{{ .UpdatedBy }}</td>
