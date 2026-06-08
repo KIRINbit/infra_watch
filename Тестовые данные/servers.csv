@@ -1,0 +1,51 @@
+id,hostname,ip_address,os_type,location,status,team_id
+1,"srv-web-01","10.0.1.10","Ubuntu 22.04","Moscow DC1","online",1
+2,"srv-web-02","10.0.1.11","Ubuntu 22.04","Moscow DC1","online",1
+3,"srv-db-01","10.0.2.10","Debian 11","Moscow DC2","online",5
+4,"srv-db-02","10.0.2.11","Debian 11","Moscow DC2","maintenance",5
+5,"srv-app-01","10.0.3.10","CentOS 8","SPb DC1","online",7
+6,"srv-app-02","10.0.3.11","CentOS 8","SPb DC1","offline",7
+7,"srv-mon-01","10.0.4.10","AlmaLinux 9","Kazan DC1","online",6
+8,"srv-mon-02","10.0.4.11","AlmaLinux 9","Kazan DC1","online",6
+9,"srv-lb-01","10.0.5.10","Ubuntu 22.04","Moscow DC1","online",36
+10,"srv-lb-02","10.0.5.11","Ubuntu 22.04","Moscow DC1","online",36
+11,"srv-cache-01","10.0.6.10","Debian 11","SPb DC2","online",33
+12,"srv-cache-02","10.0.6.11","Debian 11","SPb DC2","offline",33
+13,"srv-mq-01","10.0.7.10","CentOS 8","Moscow DC3","online",34
+14,"srv-mq-02","10.0.7.11","CentOS 8","Moscow DC3","online",34
+15,"srv-log-01","10.0.8.10","AlmaLinux 9","Kazan DC2","online",26
+16,"srv-log-02","10.0.8.11","AlmaLinux 9","Kazan DC2","maintenance",26
+17,"srv-dns-01","10.0.9.10","Ubuntu 22.04","Moscow DC1","online",35
+18,"srv-dns-02","10.0.9.11","Ubuntu 22.04","Moscow DC1","online",35
+19,"srv-bkp-01","10.0.10.10","Debian 11","SPb DC1","online",38
+20,"srv-bkp-02","10.0.10.11","Debian 11","SPb DC1","online",38
+21,"srv-k8s-01","10.0.11.10","Ubuntu 22.04","Moscow DC2","online",7
+22,"srv-k8s-02","10.0.11.11","Ubuntu 22.04","Moscow DC2","online",7
+23,"srv-k8s-03","10.0.11.12","Ubuntu 22.04","Moscow DC2","offline",7
+24,"srv-win-01","10.0.12.10","Windows Server 2022","SPb DC3","online",19
+25,"srv-win-02","10.0.12.11","Windows Server 2022","SPb DC3","online",19
+26,"srv-edge-01","10.0.13.10","AlmaLinux 9","Remote Site A","online",9
+27,"srv-edge-02","10.0.13.11","AlmaLinux 9","Remote Site B","offline",9
+28,"srv-edge-03","10.0.13.12","AlmaLinux 9","Remote Site C","online",9
+29,"srv-test-01","10.0.14.10","CentOS 8","QA Lab","online",49
+30,"srv-test-02","10.0.14.11","CentOS 8","QA Lab","maintenance",49
+31,"srv-sec-01","10.0.15.10","Ubuntu 22.04","Moscow DC1","online",4
+32,"srv-sec-02","10.0.15.11","Ubuntu 22.04","Moscow DC1","online",4
+33,"srv-iam-01","10.0.16.10","Debian 11","SPb DC1","online",25
+34,"srv-iam-02","10.0.16.11","Debian 11","SPb DC1","online",25
+35,"srv-ci-01","10.0.17.10","Ubuntu 22.04","Dev Lab","online",10
+36,"srv-ci-02","10.0.17.11","Ubuntu 22.04","Dev Lab","online",10
+37,"srv-art-01","10.0.18.10","AlmaLinux 9","SPb DC2","online",10
+38,"srv-art-02","10.0.18.11","AlmaLinux 9","SPb DC2","online",10
+39,"srv-gw-01","10.0.19.10","CentOS 8","Moscow DC1","online",30
+40,"srv-gw-02","10.0.19.11","CentOS 8","Moscow DC1","offline",30
+41,"srv-search-01","10.0.20.10","Debian 11","Kazan DC1","online",32
+42,"srv-search-02","10.0.20.11","Debian 11","Kazan DC1","online",32
+43,"srv-stream-01","10.0.21.10","Ubuntu 22.04","Moscow DC3","online",31
+44,"srv-stream-02","10.0.21.11","Ubuntu 22.04","Moscow DC3","online",31
+45,"srv-virt-01","10.0.22.10","AlmaLinux 9","SPb DC1","online",29
+46,"srv-virt-02","10.0.22.11","AlmaLinux 9","SPb DC1","maintenance",29
+47,"srv-patch-01","10.0.23.10","CentOS 8","Moscow DC2","online",27
+48,"srv-patch-02","10.0.23.11","CentOS 8","Moscow DC2","online",27
+49,"srv-audit-01","10.0.24.10","Ubuntu 22.04","Kazan DC2","online",39
+50,"srv-audit-02","10.0.24.11","Ubuntu 22.04","Kazan DC2","online",39

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .Title }}</title>
+    <style>
+        :root {
+            --bg-main: #0b0f19;       /* Глубокий полночный фон */
+            --bg-sidebar: #0e1322;    /* Более темный фон сайдбара */
+            --bg-card: #121826;       /* Фон карточек и блоков */
+            --border: #1e293b;        /* Цвет тонких границ */
+            --text-main: #ffffff;
+            --text-muted: #64748b;    /* Приглушенный текст */
+            
+            /* Статусы */
+            --success-color: #4ade80;
+            --success-bg: rgba(74, 222, 128, 0.1);
+            --success-border: rgba(74, 222, 128, 0.25);
+            
+            --warning-color: #fbbf24;
+            --warning-bg: rgba(251, 191, 36, 0.1);
+            --warning-border: rgba(251, 191, 36, 0.25);
+            
+            --danger-color: #f87171;
+            --danger-bg: rgba(248, 113, 113, 0.1);
+            --danger-border: rgba(248, 113, 113, 0.25);
+            
+            --accent-blue: #0284c7;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            display: flex;
+            background: var(--bg-main);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- САЙДБАР --- */
+        .sidebar {
+            width: 240px;
+            background: var(--bg-sidebar);
+            height: 100vh;
+            padding: 24px 16px;
+            box-sizing: border-box;
+            border-right: 1px solid var(--border);
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .sidebar menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar menu li {
+            margin-bottom: 6px;
+        }
+        .sidebar menu a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            padding: 10px 14px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        .sidebar menu a:hover {
+            background: #1e293b;
+            color: var(--text-main);
+        }
+        .sidebar menu a.active {
+            background: #0369a1;
+            color: #ffffff;
+            font-weight: 500;
+        }
+        .system-status {
+            font-size: 13px;
+            color: var(--text-muted);
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success-color);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--success-color);
+        }
+
+        /* --- КОНТЕНТНАЯ ОБЛАСТЬ --- */
+        .main-content {
+            flex: 1;
+            margin-left: 240px;
+            padding: 32px 40px;
+            box-sizing: border-box;
+            min-height: 100vh;
+        }
+
+        /* --- ВЕРХНЯЯ ПАНЕЛЬ ИЗ МАКЕТА --- */
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+        .top-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+        }
+        .top-header p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+        .controls-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Элементы управления (кнопки, селекты) */
+        select, input, .btn-secondary {
+            background: #151f32;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+        }
+        select:hover, input:hover { border-color: #475569; }
+        .btn-primary {
+            background: #0284c7;
+            border: 1px solid #0369a1;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .btn-primary:hover { background: #0369a1; }
+
+        /* --- СЕТКА КАРТОЧЕК СВОДКИ (ROW 1) --- */
+        .metrics-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .summary-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .summary-card .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .summary-card .value {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .summary-card .subtext {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* --- СРЕДНЯЯ СЕКЦИЯ: ГРАФИК + АЛЕРТЫ (ROW 2) --- */
+        .middle-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .card h3 {
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0 0 16px 0;
+        }
+        .card-header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .card-header-actions h3 { margin: 0; }
+
+        /* Имитация CSS-графика */
+        .chart-placeholder {
+            height: 140px;
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+            padding-top: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+            border-radius: 4px 4px 0 0;
+            min-height: 20px;
+            position: relative;
+        }
+        .chart-bar:nth-child(1) { height: 40%; }
+        .chart-bar:nth-child(2) { height: 75%; }
+        .chart-bar:nth-child(3) { height: 50%; }
+        .chart-bar:nth-child(4) { height: 85%; }
+        .chart-bar:nth-child(5) { height: 65%; }
+        .chart-bar:nth-child(6) { height: 95%; }
+
+        /* --- ТАБЛИЦЫ --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px 12px;
+            font-size: 13px;
+            text-align: left;
+            border-bottom: 1px solid #1e293b;
+        }
+        th {
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        tr:last-child td { border-bottom: none; }
+
+        /* Стилизация статусных бейджей из макета */
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            border: 1px solid transparent;
+        }
+        .status-badge.ok, .status-badge.online, .status-badge.resolved, .status-badge.up, .status-badge.enabled {
+            color: var(--success-color); background: var(--success-bg); border-color: var(--success-border);
+        }
+        .status-badge.warning, .status-badge.Предупр\., .status-badge.degraded, .status-badge.maintenance {
+            color: var(--warning-color); background: var(--warning-bg); border-color: var(--warning-border);
+        }
+        .status-badge.offline, .status-badge.Проблема, .status-badge.Критично, .status-badge.active, .status-badge.down, .status-badge.critical {
+            color: var(--danger-color); background: var(--danger-bg); border-color: var(--danger-border);
+        }
+        .status-badge.disabled {
+            color: var(--text-muted);
+            background: rgba(100, 116, 139, 0.1);
+            border-color: rgba(100, 116, 139, 0.25);
+        }
+
+        .alert-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+        .alert-row:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <menu>
+            <li style="padding: 10px 14px; font-weight: 700; font-size: 16px; color: white; margin-bottom: 20px;">
+                Панель InfraWatch
+            </li>
+            <li><a href="/panel" class="{{ if eq .CurrentTab "/panel" }}active{{ end }}">Панель</a></li>
+            <li><a href="/servers" class="{{ if eq .CurrentTab "/servers" }}active{{ end }}">Серверы</a></li>
+            <li><a href="/alerts" class="{{ if eq .CurrentTab "/alerts" }}active{{ end }}">Правила алертов</a></li>
+            <li><a href="/incidents" class="{{ if eq .CurrentTab "/incidents" }}active{{ end }}">Журнал инцидентов</a></li>
+            <li><a href="/reports" class="{{ if eq .CurrentTab "/reports" }}active{{ end }}">Отчеты</a></li>
+            <li><a href="/settings" class="{{ if eq .CurrentTab "/settings" }}active{{ end }}">Настройки</a></li>
+        </menu>
+
+        <div class="system-status">
+            <div class="status-dot"></div>
+            <span>Мониторинг активен</span>
+        </div>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="top-header">
+            <div>
+                <h1>
+                    {{ if eq .CurrentTab "/panel" }}Панель InfraWatch{{ else if eq .CurrentTab "/servers" }}Управление серверами{{ else if eq .CurrentTab "/alerts" }}Правила алертов{{ else if eq .CurrentTab "/incidents" }}Журнал инцидентов{{ else if eq .CurrentTab "/reports" }}Отчеты и SLA{{ else if eq .CurrentTab "/settings" }}Настройки системы{{ else }}InfraWatch{{ end }}
+                </h1>
+                <p>
+                    {{ if eq .CurrentTab "/panel" }}Состояние инфраструктуры, ресурсы и алерты{{ else if eq .CurrentTab "/servers" }}Инвентаризация, обслуживание и действия с серверами{{ else if eq .CurrentTab "/alerts" }}Пороговые значения, привязка к сервисам и активность правил{{ else if eq .CurrentTab "/incidents" }}Просмотр, подтверждение, ведение и комментарии по инцидентам{{ else if eq .CurrentTab "/reports" }}SLA-витрина, инциденты и простой по серверам{{ else if eq .CurrentTab "/settings" }}Параметры хранения, уведомлений, UI и интеграций{{ else }}Система мониторинга ИТ-инфраструктуры{{ end }}
+                </p>
+            </div>
+            <div class="controls-group">
+                <select><option>24 часа</option><option>1 час</option></select>
+                <button class="btn-secondary" onclick="window.location.reload();">Обновить</button>
+                <button class="btn-primary">Подтвердить</button>
+            </div>
+        </div>
+
+        {{ if eq .CurrentTab "/panel" }}
+        
+        <div class="metrics-summary-grid">
+            <div class="summary-card">
+                <div class="label">Серверов онлайн</div>
+                <div class="value">128 / 136</div>
+                <div class="subtext" style="color: var(--success-color);">94%</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">Критические алерты</div>
+                <div class="value" style="color: var(--danger-color);">7</div>
+                <div class="subtext">+2 сегодня</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">Средняя CPU</div>
+                <div class="value">68%</div>
+                <div class="subtext">По всему парку</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">Диск занят</div>
+                <div class="value">72%</div>
+                <div class="subtext">14,2 ТБ свободно</div>
+            </div>
+        </div>
+
+        <div class="middle-grid">
+            <div class="card">
+                <div class="card-header-actions">
+                    <h3>Нагрузка кластера</h3>
+                    <div style="display: flex; gap: 8px;">
+                        <select><option>CPU</option><option>RAM</option></select>
+                        <select><option>Все регионы</option></select>
+                    </div>
+                </div>
+                <div class="chart-placeholder">
+                    <div class="chart-bar"></div><div class="chart-bar"></div>
+                    <div class="chart-bar"></div><div class="chart-bar"></div>
+                    <div class="chart-bar"></div><div class="chart-bar"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header-actions">
+                    <h3>Активные алерты</h3>
+                    <div style="display: flex; gap: 6px;">
+                        <select style="padding: 4px 8px; font-size: 11px;"><option>Критичность</option></select>
+                        <select style="padding: 4px 8px; font-size: 11px;"><option>Владелец</option></select>
+                    </div>
+                </div>
+                <div class="alerts-list">
+                    <div class="alert-row"><span>Задержка БД</span><span class="status-badge Критично">Критично</span></div>
+                    <div class="alert-row"><span>Использование диска</span><span class="status-badge Предупр.">Предупр.</span></div>
+                    <div class="alert-row"><span>Нет heartbeat узла</span><span class="status-badge Критично">Критично</span></div>
+                    <div class="alert-row"><span>Бэкап задержан</span><span class="status-badge Предупр.">Предупр.</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header-actions">
+                <h3>Состояние серверов (Телеметрия InfluxDB v2)</h3>
+                <button class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">Экспорт</button>
+            </div>
+            <table>
+                <thead>
+                    <tr><th>Время</th><th>Сервер</th><th>Метрика</th><th>Текущее значение</th></tr>
+                </thead>
+                <tbody>
+                    {{ range .Metrics }}
+                    <tr>
+                        <td style="color: var(--text-muted);">{{ .Timestamp.Format "15:04:05" }}</td>
+                        <td><strong>{{ .Hostname }}</strong></td>
+                        <td><code>{{ .MetricName }}</code></td>
+                        <td><span class="status-badge ok">{{ printf "%.1f" .Value }}%</span></td>
+                    </tr>
+                    {{ else }}
+                    <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Нет свежих метрик в бакете `infra_metrics`.</td></tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+        {{ end }}
+
+        {{ if eq .CurrentTab "/servers" }}
+        <div class="card" style="margin-bottom: 20px;">
+            <h3>➕ Зарегистрировать новый узел</h3>
+            <form action="/servers/add" method="POST" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;">
+                <div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Имя хоста</div>
+                    <input type="text" name="hostname" placeholder="e.g. web-014" required>
+                </div>
+                <div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">IP-адрес</div>
+                    <input type="text" name="ip_address" placeholder="10.2.4.14" required>
+                </div>
+                <div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Операционная система</div>
+                    <input type="text" name="os_type" placeholder="Fedora / RHEL" required>
+                </div>
+                <div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Статус</div>
+                    <select name="status"><option value="online">online</option><option value="offline">offline</option></select>
+                </div>
+                <div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">ID Команды</div>
+                    <input type="number" name="team_id" value="1" style="width: 50px;">
+                </div>
+                <button type="submit" class="btn-primary" style="height: 36px;">Добавить в базу</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header-actions">
+                <h3>Инвентарь серверов (MariaDB)</h3>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" placeholder="Поиск серверов..." style="padding: 4px 10px;">
+                    <select><option>Все регионы</option></select>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Сервер</th><th>IP адрес</th><th>ОС</th><th>Команда</th><th>Статус</th><th>Действие</th></tr>
+                </thead>
+                <tbody>
+                    {{ range .Servers }}
+                    <tr>
+                        <td style="color: var(--text-muted);">#{{ .ID }}</td>
+                        <td><strong>{{ .Hostname }}</strong></td>
+                        <td><code>{{ .IP }}</code></td>
+                        <td>{{ .OSType }}</td>
+                        <td>{{ .TeamName }}</td>
+                        <td><span class="status-badge {{ .Status }}">{{ .Status }}</span></td>
+                        <td>
+                            <form action="/servers/delete/{{ .ID }}" method="POST" style="margin:0;">
+                                <button type="submit" style="background:none; border:none; color:var(--danger-color); cursor:pointer; font-size:12px;">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+        {{ end }}
+
+        {{ if eq .CurrentTab "/incidents" }}
+        <div class="card">
+            <div class="card-header-actions">
+                <h3>Инциденты из витрины <code>v_active_incidents_full</code></h3>
+                <div style="display: flex; gap: 8px;">
+                    <select><option>Все уровни</option></select>
+                    <select><option>Все статусы</option></select>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Узел</th><th>Описание триггера</th><th>Критичность</th><th>Статус</th><th>Время срабатывания</th></tr>
+                </thead>
+                <tbody>
+                    {{ range .Incidents }}
+                    <tr>
+                        <td style="color: var(--text-muted);">INC-{{ .ID }}</td>
+                        <td><strong>{{ .Hostname }}</strong></td>
+                        <td>{{ .Description }}</td>
+                        <td><span class="status-badge {{ .Severity }}">{{ .Severity }}</span></td>
+                        <td><span class="status-badge {{ .Status }}">{{ .Status }}</span></td>
+                        <td style="color: var(--text-muted);">{{ .CreatedAt.Format "2006-01-02 15:04:05" }}</td>
+                    </tr>
+                    {{ else }}
+                    <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px 0;">🎉 Активных инцидентов в системе не зафиксировано!</td></tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+        {{ end }}
+
+        {{ if eq .CurrentTab "/alerts" }}
+        <div class="card">
+            <div class="card-header-actions">
+                <h3>Конфигурация пороговых значений (MariaDB)</h3>
+                <div style="display: flex; gap: 8px;">
+                    <select><option>Все метрики</option></select>
+                    <select><option>Все команды</option></select>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Сервер</th><th>Сервис</th><th>Метрика</th><th>Мин.</th><th>Макс.</th><th>Статус сервиса</th><th>Команда</th><th>Правило</th></tr>
+                </thead>
+                <tbody>
+                    {{ range .AlertRules }}
+                    <tr>
+                        <td style="color: var(--text-muted);">#{{ .ID }}</td>
+                        <td><strong>{{ .Hostname }}</strong></td>
+                        <td>{{ .ServiceName }} <span style="color: var(--text-muted);">:{{ .ServicePort }}</span></td>
+                        <td><code>{{ .MetricName }}</code></td>
+                        <td>{{ if .ThresholdMin }}{{ .ThresholdMin }}{{ else }}не задан{{ end }}</td>
+                        <td>{{ if .ThresholdMax }}{{ .ThresholdMax }}{{ else }}не задан{{ end }}</td>
+                        <td><span class="status-badge {{ .ServiceStatus }}">{{ .ServiceStatus }}</span></td>
+                        <td>{{ .TeamName }}</td>
+                        <td>
+                            {{ if .IsActive }}
+                            <span class="status-badge enabled">active</span>
+                            {{ else }}
+                            <span class="status-badge disabled">disabled</span>
+                            {{ end }}
+                        </td>
+                    </tr>
+                    {{ else }}
+                    <tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 24px 0;">Правила алертов не найдены.</td></tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+        {{ end }}
+        {{ if eq .CurrentTab "/reports" }}
+        <div class="card">
+            <div class="card-header-actions">
+                <h3>Выгрузка из представления <code>v_server_sla_report</code></h3>
+                <div style="display: flex; gap: 8px;">
+                    <select><option>Все команды</option></select>
+                    <select><option>30 дней</option></select>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr><th>Сервер</th><th>ОС</th><th>Команда</th><th>Статус</th><th>SLA цель</th><th>Факт</th><th>Инциденты</th><th>Крит.</th><th>Простой</th><th>Итог</th></tr>
+                </thead>
+                <tbody>
+                    {{ range .SLAReports }}
+                    <tr>
+                        <td><strong>{{ .Hostname }}</strong><div style="color: var(--text-muted); font-size: 11px;">#{{ .ServerID }}</div></td>
+                        <td>{{ .OSType }}</td>
+                        <td>{{ .TeamName }}</td>
+                        <td><span class="status-badge {{ .ServerStatus }}">{{ .ServerStatus }}</span></td>
+                        <td>{{ .TargetUptimePct }}%</td>
+                        <td><strong>{{ .ActualUptimePct }}%</strong><div style="color: var(--text-muted); font-size: 11px;">{{ .MeasurementPeriodDays }} дн.</div></td>
+                        <td>{{ .TotalIncidents }}</td>
+                        <td>{{ .CriticalIncidents }}</td>
+                        <td>{{ .TotalDowntimeMinutes }} мин.</td>
+                        <td>
+                            {{ if eq .ComplianceStatus "ok" }}
+                            <span class="status-badge ok">SLA ok</span>
+                            {{ else if eq .ComplianceStatus "critical" }}
+                            <span class="status-badge critical">risk</span>
+                            {{ else }}
+                            <span class="status-badge warning">below target</span>
+                            {{ end }}
+                        </td>
+                    </tr>
+                    {{ else }}
+                    <tr><td colspan="10" style="text-align: center; color: var(--text-muted); padding: 24px 0;">SLA-отчеты не найдены.</td></tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+        {{ end }}
+
+        {{ if eq .CurrentTab "/settings" }}
+        <div class="card">
+            <div class="card-header-actions">
+                <h3>Системные параметры <code>system_settings</code></h3>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" placeholder="Поиск настроек..." style="padding: 4px 10px;">
+                    <select><option>Все группы</option></select>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Параметр</th><th>Значение</th><th>Обновлено</th><th>Автор</th></tr>
+                </thead>
+                <tbody>
+                    {{ range .SystemSettings }}
+                    <tr>
+                        <td style="color: var(--text-muted);">#{{ .ID }}</td>
+                        <td><code>{{ .Key }}</code></td>
+                        <td>{{ .Value }}</td>
+                        <td style="color: var(--text-muted);">{{ .UpdatedAt }}</td>
+                        <td>{{ .UpdatedBy }}</td>
+                    </tr>
+                    {{ else }}
+                    <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px 0;">Системные настройки не найдены.</td></tr>
+                    {{ end }}
+                </tbody>
+            </table>
+        </div>
+        {{ end }}
+
+    </div>
+</body>
+</html>

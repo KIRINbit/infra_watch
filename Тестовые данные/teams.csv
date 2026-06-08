@@ -1,0 +1,51 @@
+id,name,description,lead_user_id
+1,"DevOps Alpha","Core infrastructure team",1
+2,"DevOps Beta","Cloud migration team",2
+3,"Network Ops","Routing and switching",3
+4,"Security Ops","Firewall and compliance",4
+5,"Database Team","RDBMS and NoSQL management",5
+6,"Monitoring Squad","Alerting and dashboards",6
+7,"Platform Eng","Kubernetes and containers",7
+8,"Storage Ops","SAN and backup systems",8
+9,"Edge Computing","IoT and remote nodes",9
+10,"Automation Lab","CI/CD and IaC pipelines",10
+11,"Support L1","First line response",11
+12,"Support L2","Escalation handling",12
+13,"Capacity Plan","Resource forecasting",13
+14,"Compliance Audit","SLA and reporting",14
+15,"Release Mgmt","Deployment coordination",15
+16,"Incident Response","Major outage handling",16
+17,"Performance Tuning","Query and system optimization",17
+18,"Cloud Native","Serverless and microservices",18
+19,"Legacy Systems","On-prem maintenance",19
+20,"Research Dev","Proof of concept testing",20
+21,"Vendor Liaison","Third-party integrations",21
+22,"Training Unit","Onboarding and docs",22
+23,"Disaster Recovery","Failover and backups",23
+24,"Cost Optimization","Cloud billing and rightsizing",24
+25,"Access Control","IAM and permissions",25
+26,"Log Management","Centralized logging",26
+27,"Patch Management","OS and firmware updates",27
+28,"Hardware Ops","Physical server maintenance",28
+29,"Virtualization","VMware and Hyper-V",29
+30,"API Gateway","Service mesh and routing",30
+31,"Data Pipeline","ETL and streaming",31
+32,"Search Cluster","Elastic and indexing",32
+33,"Cache Layer","Redis and memcached",33
+34,"Message Queue","Kafka and RabbitMQ",34
+35,"DNS Services","Internal and external resolution",35
+36,"Load Balancing","HAProxy and Nginx",36
+37,"Certificate Mgmt","TLS and PKI",37
+38,"Backup Ops","Snapshot and archival",38
+39,"Compliance Sec","GDPR and ISO audits",39
+40,"Dev Tools","Internal developer platform",40
+41,"SRE Team","Reliability engineering",41
+42,"Observability","Tracing and metrics",42
+43,"GitOps Flow","Declarative deployments",43
+44,"Service Desk","Ticket routing",44
+45,"Asset Tracking","Inventory and lifecycle",45
+46,"Network Sec","IDS/IPS management",46
+47,"Cloud FinOps","Budget and forecasting",47
+48,"App Support","Business app maintenance",48
+49,"QA Infra","Test environment provisioning",49
+50,"Arch Review","Design and standards",50
