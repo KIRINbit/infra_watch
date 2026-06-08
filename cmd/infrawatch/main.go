@@ -49,6 +49,7 @@ func main() {
 	fs := http.FileServer(http.Dir("static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fs))
 
+	// --- Страницы (GET) ---
 	r.Get("/", serverHandler.RenderPage)
 	r.Get("/panel", serverHandler.RenderPage)
 	r.Get("/servers", serverHandler.RenderPage)
@@ -57,8 +58,24 @@ func main() {
 	r.Get("/reports", serverHandler.RenderPage)
 	r.Get("/settings", serverHandler.RenderPage)
 
+	// --- Действия над серверами ---
 	r.Post("/servers/add", serverHandler.AddServer)
+	r.Post("/servers/edit/{id}", serverHandler.EditServer)
 	r.Post("/servers/delete/{id}", serverHandler.DeleteServer)
+
+	// --- Действия над инцидентами ---
+	r.Post("/incidents/ack/{id}", serverHandler.AcknowledgeIncident)
+	r.Post("/incidents/resolve/{id}", serverHandler.ResolveIncident)
+
+	// --- Действия над правилами алертов ---
+	r.Post("/alerts/thresholds/{id}", serverHandler.UpdateAlertRule)
+	r.Post("/alerts/toggle/{id}", serverHandler.ToggleAlertRule)
+
+	// --- Действия над системными настройками ---
+	r.Post("/settings/update/{id}", serverHandler.UpdateSystemSetting)
+
+	// --- Экспорт отчётов ---
+	r.Get("/reports/export.csv", serverHandler.ExportReportsCSV)
 
 	// Настройка плавного завершения сервера (Graceful Shutdown)
 	srv := &http.Server{
@@ -81,7 +98,7 @@ func main() {
 	log.Println("🛑 Завершение работы сервера...")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	
+
 	if err := srv.Shutdown(ctx); err != nil {
 		log.Fatalf("Сервер принудительно остановлен: %v", err)
 	}

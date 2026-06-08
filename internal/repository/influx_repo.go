@@ -48,11 +48,11 @@ func (r *influxMetricRepository) GetLastMetrics(bucket string) ([]models.ServerM
 	// Читаем результаты построчно
 	for result.Next() {
 		record := result.Record()
-		
+
 		// ИСПРАВЛЕНО: ищем тег "hostname", как в Bash-скрипте, а не "host"
 		hostname, _ := record.ValueByKey("hostname").(string)
 		metricName := record.Field()
-		
+
 		var val float64
 		if floatVal, ok := record.Value().(float64); ok {
 			val = floatVal

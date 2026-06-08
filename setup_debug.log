@@ -1,0 +1,103 @@
++ set -euo pipefail
++++ dirname scripts/setup.sh
+++ cd scripts
+++ pwd
++ SCRIPT_DIR=/home/kirinbit/Проекты/infra_watch/scripts
+++ cd /home/kirinbit/Проекты/infra_watch/scripts/..
+++ pwd
++ PROJECT_DIR=/home/kirinbit/Проекты/infra_watch
++ CSV_DIR='/home/kirinbit/Проекты/infra_watch/Тестовые данные'
++ SEED_CSV=1
++ SEED_METRICS=1
++ RESET=0
++ command -v podman
++ RUNTIME=podman
++ COMPOSE='podman compose'
++ RED='\033[0;31m'
++ GREEN='\033[0;32m'
++ CYAN='\033[0;36m'
++ YELLOW='\033[1;33m'
++ NC='\033[0m'
++ cd /home/kirinbit/Проекты/infra_watch
++ '[' 0 = 1 ']'
++ info 'Запуск стека (podman compose up -d)...'
++ echo -e '\033[0;36m▶\033[0m Запуск стека (podman compose up -d)...'
+[0;36m▶[0m Запуск стека (podman compose up -d)...
++ podman compose up -d --build
+[4m>>>> Executing external compose provider "/usr/bin/podman-compose". Please see podman-compose(1) for how to disable this message. <<<<
+
+[0m[1/2] STEP 1/6: FROM golang:1.26-alpine AS builder
+[1/2] STEP 2/6: WORKDIR /app
+--> Using cache 2d78646de9339fe62a11f00bbbc6d59f87511a523c6a5af9177e21998f715bb0
+--> 2d78646de933
+[1/2] STEP 3/6: COPY go.mod go.sum ./
+--> Using cache 54b84c8fabfc34f65875871c7fe1e1f6d95503a3b02365818a2ed43f22dfb569
+--> 54b84c8fabfc
+[1/2] STEP 4/6: RUN go mod download
+--> Using cache 1e5ce957d06e91617895cb8acc3af1ccda11ac84e3c366be5193d997243639f8
+--> 1e5ce957d06e
+[1/2] STEP 5/6: COPY . .
+--> c11291991244
+[1/2] STEP 6/6: RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o infrawatch ./cmd/infrawatch/main.go
+--> 5cae4ee446e3
+[2/2] STEP 1/7: FROM alpine:latest
+[2/2] STEP 2/7: RUN apk --no-cache add ca-certificates tzdata
+--> Using cache 3ee58a97c8d8a176fc27e5bf9176ff3abe98896aa399695db975f9343baf7256
+--> 3ee58a97c8d8
+[2/2] STEP 3/7: WORKDIR /root/
+--> Using cache 68c334efa5ccbcd23dd749ef8437721e1c2a915c0ec897c9fc484b22fa58f96b
+--> 68c334efa5cc
+[2/2] STEP 4/7: COPY --from=builder /app/infrawatch .
+--> Using cache 82901a5c2df7c3cd4d17395c8fa20bcb620cacd3be26762912c0da8a6da44643
+--> 82901a5c2df7
+[2/2] STEP 5/7: COPY --from=builder /app/templates ./templates
+--> Using cache ffd37db1cd54946fdde1a258ed91662d946646f04213836aab525960efa92f09
+--> ffd37db1cd54
+[2/2] STEP 6/7: EXPOSE 8080
+--> Using cache 04ff9b66de883498685228d13bed0c9cc6c9956923579a19359cbba65b40cdd8
+--> 04ff9b66de88
+[2/2] STEP 7/7: CMD ["./infrawatch"]
+--> Using cache 7ee7f073ddd33b17a6b001bf64795bb3251070cc8c4cd5744545e7b57025590b
+[2/2] COMMIT infra_watch_web
+--> 7ee7f073ddd3
+Successfully tagged localhost/infra_watch_web:latest
+7ee7f073ddd33b17a6b001bf64795bb3251070cc8c4cd5744545e7b57025590b
+mariadb
+influxdb
+infra_watch
++ info 'Ожидание готовности MariaDB...'
++ echo -e '\033[0;36m▶\033[0m Ожидание готовности MariaDB...'
+[0;36m▶[0m Ожидание готовности MariaDB...
+++ seq 1 60
++ for i in $(seq 1 60)
++ podman exec mariadb mariadb -uroot -proot123 -e 'SELECT 1'
++ ok 'MariaDB готова'
++ echo -e '\033[0;32m✔\033[0m MariaDB готова'
+[0;32m✔[0m MariaDB готова
++ break
++ info 'Ожидание готовности InfluxDB...'
++ echo -e '\033[0;36m▶\033[0m Ожидание готовности InfluxDB...'
+[0;36m▶[0m Ожидание готовности InfluxDB...
+++ seq 1 60
++ for i in $(seq 1 60)
++ curl -sf http://localhost:8086/health
++ ok 'InfluxDB готова'
++ echo -e '\033[0;32m✔\033[0m InfluxDB готова'
+[0;32m✔[0m InfluxDB готова
++ break
++ info 'Применение create_tables.sql...'
++ echo -e '\033[0;36m▶\033[0m Применение create_tables.sql...'
+[0;36m▶[0m Применение create_tables.sql...
++ podman exec -i mariadb mariadb -uroot -proot123
+--------------
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'engineer', 'viewer') NOT NULL DEFAULT 'viewer',
+    email VARCHAR(100) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+--------------
+
+ERROR 1050 (42S01) at line 5: Table 'users' already exists

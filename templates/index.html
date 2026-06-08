@@ -5,26 +5,25 @@
     <title>{{ .Title }}</title>
     <style>
         :root {
-            --bg-main: #0b0f19;       /* Глубокий полночный фон */
-            --bg-sidebar: #0e1322;    /* Более темный фон сайдбара */
-            --bg-card: #121826;       /* Фон карточек и блоков */
-            --border: #1e293b;        /* Цвет тонких границ */
+            --bg-main: #0b0f19;
+            --bg-sidebar: #0e1322;
+            --bg-card: #121826;
+            --border: #1e293b;
             --text-main: #ffffff;
-            --text-muted: #64748b;    /* Приглушенный текст */
-            
-            /* Статусы */
+            --text-muted: #64748b;
+
             --success-color: #4ade80;
             --success-bg: rgba(74, 222, 128, 0.1);
             --success-border: rgba(74, 222, 128, 0.25);
-            
+
             --warning-color: #fbbf24;
             --warning-bg: rgba(251, 191, 36, 0.1);
             --warning-border: rgba(251, 191, 36, 0.25);
-            
+
             --danger-color: #f87171;
             --danger-bg: rgba(248, 113, 113, 0.1);
             --danger-border: rgba(248, 113, 113, 0.25);
-            
+
             --accent-blue: #0284c7;
         }
 
@@ -55,9 +54,7 @@
             padding: 0;
             margin: 0;
         }
-        .sidebar menu li {
-            margin-bottom: 6px;
-        }
+        .sidebar menu li { margin-bottom: 6px; }
         .sidebar menu a {
             color: var(--text-muted);
             text-decoration: none;
@@ -103,7 +100,6 @@
             min-height: 100vh;
         }
 
-        /* --- ВЕРХНЯЯ ПАНЕЛЬ ИЗ МАКЕТА --- */
         .top-header {
             display: flex;
             justify-content: space-between;
@@ -125,7 +121,6 @@
             gap: 10px;
         }
 
-        /* Элементы управления (кнопки, селекты) */
         select, input, .btn-secondary {
             background: #151f32;
             border: 1px solid var(--border);
@@ -149,7 +144,67 @@
         }
         .btn-primary:hover { background: #0369a1; }
 
-        /* --- СЕТКА КАРТОЧЕК СВОДКИ (ROW 1) --- */
+        .btn-success {
+            background: #16a34a;
+            border: 1px solid #15803d;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .btn-success:hover { background: #15803d; }
+
+        .btn-warning {
+            background: #d97706;
+            border: 1px solid #b45309;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .btn-warning:hover { background: #b45309; }
+
+        .btn-danger {
+            background: transparent;
+            border: 1px solid var(--danger-border);
+            color: var(--danger-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .btn-danger:hover { background: var(--danger-bg); }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-ghost:hover { border-color: #475569; }
+
+        /* --- Flash-сообщения --- */
+        .flash {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            border: 1px solid transparent;
+        }
+        .flash.ok { background: var(--success-bg); border-color: var(--success-border); color: var(--success-color); }
+        .flash.err { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger-color); }
+
+        /* --- Метрики-карточки --- */
         .metrics-summary-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -177,7 +232,6 @@
             color: var(--text-muted);
         }
 
-        /* --- СРЕДНЯЯ СЕКЦИЯ: ГРАФИК + АЛЕРТЫ (ROW 2) --- */
         .middle-grid {
             display: grid;
             grid-template-columns: 1fr 380px;
@@ -203,7 +257,6 @@
         }
         .card-header-actions h3 { margin: 0; }
 
-        /* Имитация CSS-графика */
         .chart-placeholder {
             height: 140px;
             display: flex;
@@ -226,7 +279,6 @@
         .chart-bar:nth-child(5) { height: 65%; }
         .chart-bar:nth-child(6) { height: 95%; }
 
-        /* --- ТАБЛИЦЫ --- */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -236,6 +288,7 @@
             font-size: 13px;
             text-align: left;
             border-bottom: 1px solid #1e293b;
+            vertical-align: middle;
         }
         th {
             color: var(--text-muted);
@@ -246,7 +299,6 @@
         }
         tr:last-child td { border-bottom: none; }
 
-        /* Стилизация статусных бейджей из макета */
         .status-badge {
             display: inline-block;
             padding: 3px 8px;
@@ -262,8 +314,11 @@
         .status-badge.warning, .status-badge.Предупр\., .status-badge.degraded, .status-badge.maintenance {
             color: var(--warning-color); background: var(--warning-bg); border-color: var(--warning-border);
         }
-        .status-badge.offline, .status-badge.Проблема, .status-badge.Критично, .status-badge.active, .status-badge.down, .status-badge.critical {
+        .status-badge.offline, .status-badge.Проблема, .status-badge.Критично, .status-badge.active, .status-badge.down, .status-badge.critical, .status-badge.high, .status-badge.acknowledged, .status-badge.open {
             color: var(--danger-color); background: var(--danger-bg); border-color: var(--danger-border);
+        }
+        .status-badge.low, .status-badge.medium {
+            color: var(--warning-color); background: var(--warning-bg); border-color: var(--warning-border);
         }
         .status-badge.disabled {
             color: var(--text-muted);
@@ -280,6 +335,22 @@
             font-size: 13px;
         }
         .alert-row:last-child { border-bottom: none; }
+
+        .actions-cell {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .threshold-input {
+            width: 70px;
+            padding: 4px 6px;
+            font-size: 12px;
+        }
+        .setting-input {
+            width: 100%;
+            max-width: 360px;
+        }
     </style>
 </head>
 <body>
@@ -304,7 +375,7 @@
     </div>
 
     <div class="main-content">
-        
+
         <div class="top-header">
             <div>
                 <h1>
@@ -315,34 +386,49 @@
                 </p>
             </div>
             <div class="controls-group">
-                <select><option>24 часа</option><option>1 час</option></select>
                 <button class="btn-secondary" onclick="window.location.reload();">Обновить</button>
-                <button class="btn-primary">Подтвердить</button>
+                {{ if eq .CurrentTab "/reports" }}
+                <a href="/reports/export.csv" class="btn-primary" style="text-decoration: none; display: inline-flex; align-items: center;">Экспорт CSV</a>
+                {{ end }}
             </div>
         </div>
 
+        {{ if .Flash }}
+            {{ if eq (index (split .Flash "=") 0) "error" }}
+                <div class="flash err">⚠️ Действие не выполнено ({{ .Flash }}). Подробности в логах сервера.</div>
+            {{ else }}
+                <div class="flash ok">✅ Действие выполнено успешно ({{ .Flash }}).</div>
+            {{ end }}
+        {{ end }}
+
         {{ if eq .CurrentTab "/panel" }}
-        
+
         <div class="metrics-summary-grid">
             <div class="summary-card">
                 <div class="label">Серверов онлайн</div>
-                <div class="value">128 / 136</div>
-                <div class="subtext" style="color: var(--success-color);">94%</div>
+                <div class="value">{{ if .Servers }}{{ len .Servers }}{{ else }}0{{ end }}</div>
+                <div class="subtext" style="color: var(--success-color);">Всего зарегистрировано</div>
             </div>
             <div class="summary-card">
-                <div class="label">Критические алерты</div>
-                <div class="value" style="color: var(--danger-color);">7</div>
-                <div class="subtext">+2 сегодня</div>
+                <div class="label">Активные инциденты</div>
+                <div class="value" style="color: var(--danger-color);">
+                    <a href="/incidents" style="color: inherit; text-decoration: none;">см. журнал</a>
+                </div>
+                <div class="subtext">Откройте вкладку «Инциденты»</div>
             </div>
             <div class="summary-card">
-                <div class="label">Средняя CPU</div>
-                <div class="value">68%</div>
-                <div class="subtext">По всему парку</div>
+                <div class="label">Правила алертов</div>
+                <div class="value">
+                    <a href="/alerts" style="color: inherit; text-decoration: none;">управлять</a>
+                </div>
+                <div class="subtext">Включение / пороги</div>
             </div>
             <div class="summary-card">
-                <div class="label">Диск занят</div>
-                <div class="value">72%</div>
-                <div class="subtext">14,2 ТБ свободно</div>
+                <div class="label">Отчёты SLA</div>
+                <div class="value">
+                    <a href="/reports" style="color: inherit; text-decoration: none;">открыть</a>
+                </div>
+                <div class="subtext">Экспорт в CSV</div>
             </div>
         </div>
 
@@ -364,17 +450,13 @@
 
             <div class="card">
                 <div class="card-header-actions">
-                    <h3>Активные алерты</h3>
-                    <div style="display: flex; gap: 6px;">
-                        <select style="padding: 4px 8px; font-size: 11px;"><option>Критичность</option></select>
-                        <select style="padding: 4px 8px; font-size: 11px;"><option>Владелец</option></select>
-                    </div>
+                    <h3>Быстрые действия</h3>
                 </div>
                 <div class="alerts-list">
-                    <div class="alert-row"><span>Задержка БД</span><span class="status-badge Критично">Критично</span></div>
-                    <div class="alert-row"><span>Использование диска</span><span class="status-badge Предупр.">Предупр.</span></div>
-                    <div class="alert-row"><span>Нет heartbeat узла</span><span class="status-badge Критично">Критично</span></div>
-                    <div class="alert-row"><span>Бэкап задержан</span><span class="status-badge Предупр.">Предупр.</span></div>
+                    <div class="alert-row"><a href="/servers" style="color: var(--text-main); text-decoration: none;">➕ Добавить сервер</a><span class="status-badge enabled">CRUD</span></div>
+                    <div class="alert-row"><a href="/incidents" style="color: var(--text-main); text-decoration: none;">🚨 Закрыть инцидент</a><span class="status-badge enabled">CRUD</span></div>
+                    <div class="alert-row"><a href="/alerts" style="color: var(--text-main); text-decoration: none;">🔔 Настроить порог</a><span class="status-badge enabled">CRUD</span></div>
+                    <div class="alert-row"><a href="/settings" style="color: var(--text-main); text-decoration: none;">⚙️ Изменить параметр</a><span class="status-badge enabled">CRUD</span></div>
                 </div>
             </div>
         </div>
@@ -382,7 +464,7 @@
         <div class="card">
             <div class="card-header-actions">
                 <h3>Состояние серверов (Телеметрия InfluxDB v2)</h3>
-                <button class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">Экспорт</button>
+                <a class="btn-ghost" href="/reports/export.csv">Экспорт</a>
             </div>
             <table>
                 <thead>
@@ -397,7 +479,7 @@
                         <td><span class="status-badge ok">{{ printf "%.1f" .Value }}%</span></td>
                     </tr>
                     {{ else }}
-                    <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Нет свежих метрик в бакете `infra_metrics`.</td></tr>
+                    <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Нет свежих метрик в бакете <code>infra_metrics</code>.</td></tr>
                     {{ end }}
                 </tbody>
             </table>
@@ -406,6 +488,37 @@
 
         {{ if eq .CurrentTab "/servers" }}
         <div class="card" style="margin-bottom: 20px;">
+            {{ if .EditServer }}
+            <h3>✏️ Редактирование сервера #{{ .EditServer.ID }} — {{ .EditServer.Hostname }}</h3>
+            <form action="/servers/edit/{{ .EditServer.ID }}" method="POST" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;">
+                <div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Имя хоста</div>
+                    <input type="text" name="hostname" value="{{ .EditServer.Hostname }}" required>
+                </div>
+                <div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">IP-адрес</div>
+                    <input type="text" name="ip_address" value="{{ .EditServer.IP }}" required>
+                </div>
+                <div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Операционная система</div>
+                    <input type="text" name="os_type" value="{{ .EditServer.OSType }}" required>
+                </div>
+                <div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Статус</div>
+                    <select name="status">
+                        <option value="online" {{ if eq .EditServer.Status "online" }}selected{{ end }}>online</option>
+                        <option value="offline" {{ if eq .EditServer.Status "offline" }}selected{{ end }}>offline</option>
+                        <option value="maintenance" {{ if eq .EditServer.Status "maintenance" }}selected{{ end }}>maintenance</option>
+                    </select>
+                </div>
+                <div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">ID Команды</div>
+                    <input type="number" name="team_id" value="{{ .EditServer.TeamID }}" style="width: 70px;">
+                </div>
+                <button type="submit" class="btn-primary" style="height: 36px;">Сохранить</button>
+                <a href="/servers" class="btn-ghost" style="height: 36px; line-height: 24px;">Отмена</a>
+            </form>
+            {{ else }}
             <h3>➕ Зарегистрировать новый узел</h3>
             <form action="/servers/add" method="POST" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;">
                 <div>
@@ -422,14 +535,15 @@
                 </div>
                 <div>
                     <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Статус</div>
-                    <select name="status"><option value="online">online</option><option value="offline">offline</option></select>
+                    <select name="status"><option value="online">online</option><option value="offline">offline</option><option value="maintenance">maintenance</option></select>
                 </div>
                 <div>
                     <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">ID Команды</div>
-                    <input type="number" name="team_id" value="1" style="width: 50px;">
+                    <input type="number" name="team_id" value="1" style="width: 70px;">
                 </div>
                 <button type="submit" class="btn-primary" style="height: 36px;">Добавить в базу</button>
             </form>
+            {{ end }}
         </div>
 
         <div class="card">
@@ -442,7 +556,7 @@
             </div>
             <table>
                 <thead>
-                    <tr><th>ID</th><th>Сервер</th><th>IP адрес</th><th>ОС</th><th>Команда</th><th>Статус</th><th>Действие</th></tr>
+                    <tr><th>ID</th><th>Сервер</th><th>IP адрес</th><th>ОС</th><th>Команда</th><th>Статус</th><th>Действия</th></tr>
                 </thead>
                 <tbody>
                     {{ range .Servers }}
@@ -454,11 +568,16 @@
                         <td>{{ .TeamName }}</td>
                         <td><span class="status-badge {{ .Status }}">{{ .Status }}</span></td>
                         <td>
-                            <form action="/servers/delete/{{ .ID }}" method="POST" style="margin:0;">
-                                <button type="submit" style="background:none; border:none; color:var(--danger-color); cursor:pointer; font-size:12px;">Удалить</button>
-                            </form>
+                            <div class="actions-cell">
+                                <a href="/servers?edit={{ .ID }}" class="btn-ghost">✏️ Изменить</a>
+                                <form action="/servers/delete/{{ .ID }}" method="POST" style="margin:0;" onsubmit="return confirm('Удалить сервер {{ .Hostname }}?');">
+                                    <button type="submit" class="btn-danger">🗑 Удалить</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
+                    {{ else }}
+                    <tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 24px 0;">Серверы не найдены. Добавьте первый узел с помощью формы выше.</td></tr>
                     {{ end }}
                 </tbody>
             </table>
@@ -476,7 +595,7 @@
             </div>
             <table>
                 <thead>
-                    <tr><th>ID</th><th>Узел</th><th>Описание триггера</th><th>Критичность</th><th>Статус</th><th>Время срабатывания</th></tr>
+                    <tr><th>ID</th><th>Узел</th><th>Описание триггера</th><th>Критичность</th><th>Статус</th><th>Время срабатывания</th><th>Действия</th></tr>
                 </thead>
                 <tbody>
                     {{ range .Incidents }}
@@ -486,10 +605,24 @@
                         <td>{{ .Description }}</td>
                         <td><span class="status-badge {{ .Severity }}">{{ .Severity }}</span></td>
                         <td><span class="status-badge {{ .Status }}">{{ .Status }}</span></td>
-                        <td style="color: var(--text-muted);">{{ .CreatedAt.Format "2006-01-02 15:04:05" }}</td>
+                        <td style="color: var(--text-muted);">{{ .CreatedAt }}</td>
+                        <td>
+                            <div class="actions-cell">
+                                {{ if eq .Status "open" }}
+                                <form action="/incidents/ack/{{ .ID }}" method="POST" style="margin:0;">
+                                    <button type="submit" class="btn-warning">👀 Принять</button>
+                                </form>
+                                {{ end }}
+                                {{ if or (eq .Status "open") (eq .Status "acknowledged") }}
+                                <form action="/incidents/resolve/{{ .ID }}" method="POST" style="margin:0;" onsubmit="return confirm('Закрыть инцидент INC-{{ .ID }}?');">
+                                    <button type="submit" class="btn-success">✔ Закрыть</button>
+                                </form>
+                                {{ end }}
+                            </div>
+                        </td>
                     </tr>
                     {{ else }}
-                    <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px 0;">🎉 Активных инцидентов в системе не зафиксировано!</td></tr>
+                    <tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 24px 0;">🎉 Активных инцидентов в системе не зафиксировано!</td></tr>
                     {{ end }}
                 </tbody>
             </table>
@@ -507,7 +640,7 @@
             </div>
             <table>
                 <thead>
-                    <tr><th>ID</th><th>Сервер</th><th>Сервис</th><th>Метрика</th><th>Мин.</th><th>Макс.</th><th>Статус сервиса</th><th>Команда</th><th>Правило</th></tr>
+                    <tr><th>ID</th><th>Сервер</th><th>Сервис</th><th>Метрика</th><th>Мин.</th><th>Макс.</th><th>Статус сервиса</th><th>Команда</th><th>Правило</th><th>Действия</th></tr>
                 </thead>
                 <tbody>
                     {{ range .AlertRules }}
@@ -516,8 +649,14 @@
                         <td><strong>{{ .Hostname }}</strong></td>
                         <td>{{ .ServiceName }} <span style="color: var(--text-muted);">:{{ .ServicePort }}</span></td>
                         <td><code>{{ .MetricName }}</code></td>
-                        <td>{{ if .ThresholdMin }}{{ .ThresholdMin }}{{ else }}не задан{{ end }}</td>
-                        <td>{{ if .ThresholdMax }}{{ .ThresholdMax }}{{ else }}не задан{{ end }}</td>
+                        <form action="/alerts/thresholds/{{ .ID }}" method="POST"></form>
+                        <td>
+                            <form action="/alerts/thresholds/{{ .ID }}" method="POST" style="margin:0;">
+                                <input class="threshold-input" type="text" name="threshold_min" value="{{ .ThresholdMin }}" placeholder="—">
+                        </td>
+                        <td>
+                                <input class="threshold-input" type="text" name="threshold_max" value="{{ .ThresholdMax }}" placeholder="—">
+                        </td>
                         <td><span class="status-badge {{ .ServiceStatus }}">{{ .ServiceStatus }}</span></td>
                         <td>{{ .TeamName }}</td>
                         <td>
@@ -527,9 +666,19 @@
                             <span class="status-badge disabled">disabled</span>
                             {{ end }}
                         </td>
+                        <td>
+                                <button type="submit" class="btn-ghost">💾</button>
+                            </form>
+                            <form action="/alerts/toggle/{{ .ID }}" method="POST" style="margin:0; display:inline;">
+                                <input type="hidden" name="active" value="{{ if .IsActive }}0{{ else }}1{{ end }}">
+                                <button type="submit" class="btn-{{ if .IsActive }}warning{{ else }}success{{ end }}">
+                                    {{ if .IsActive }}⏸ Выкл{{ else }}▶ Вкл{{ end }}
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                     {{ else }}
-                    <tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 24px 0;">Правила алертов не найдены.</td></tr>
+                    <tr><td colspan="10" style="text-align: center; color: var(--text-muted); padding: 24px 0;">Правила алертов не найдены.</td></tr>
                     {{ end }}
                 </tbody>
             </table>
@@ -539,10 +688,7 @@
         <div class="card">
             <div class="card-header-actions">
                 <h3>Выгрузка из представления <code>v_server_sla_report</code></h3>
-                <div style="display: flex; gap: 8px;">
-                    <select><option>Все команды</option></select>
-                    <select><option>30 дней</option></select>
-                </div>
+                <a href="/reports/export.csv" class="btn-primary" style="text-decoration: none; display: inline-flex; align-items: center;">⬇ Скачать CSV</a>
             </div>
             <table>
                 <thead>
@@ -589,19 +735,26 @@
             </div>
             <table>
                 <thead>
-                    <tr><th>ID</th><th>Параметр</th><th>Значение</th><th>Обновлено</th><th>Автор</th></tr>
+                    <tr><th>ID</th><th>Параметр</th><th>Значение</th><th>Обновлено</th><th>Автор</th><th>Действия</th></tr>
                 </thead>
                 <tbody>
                     {{ range .SystemSettings }}
                     <tr>
                         <td style="color: var(--text-muted);">#{{ .ID }}</td>
                         <td><code>{{ .Key }}</code></td>
-                        <td>{{ .Value }}</td>
+                        <form action="/settings/update/{{ .ID }}" method="POST" style="margin:0;">
+                        <td>
+                                <input class="setting-input" type="text" name="setting_value" value="{{ .Value }}">
+                        </td>
                         <td style="color: var(--text-muted);">{{ .UpdatedAt }}</td>
                         <td>{{ .UpdatedBy }}</td>
+                        <td>
+                                <button type="submit" class="btn-success">💾 Сохранить</button>
+                            </form>
+                        </td>
                     </tr>
                     {{ else }}
-                    <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px 0;">Системные настройки не найдены.</td></tr>
+                    <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px 0;">Системные настройки не найдены.</td></tr>
                     {{ end }}
                 </tbody>
             </table>
